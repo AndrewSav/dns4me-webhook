@@ -1,0 +1,46 @@
+version: '3.8'
+
+networks:
+  http_network:
+    external: true
+  mail_network:
+    external: false
+
+services:
+ 
+  traefik:
+    image: traefik:2.4.0
+    container_name: "traefik"
+    restart: unless-stopped
+    networks:
+      - http_network
+    ports:
+      # This allows incoming connection on 80 to be forwarder to port 80 of traefik
+      - "80:80"
+      # This allows incoming connection on 443 to be forwarder to port 443 of traefik
+      - "443:443"
+      # As above. Browse to port 8080 http to see trafik insecure dashboard
+      # - "8080:8080"
+    volumes:
+      # static config
+      - "$PWD/traefik.toml:/traefik.toml"
+      # dynamic config
+      - "$PWD/file.toml:/file.toml"
+      # let's encrypt data
+      - "$PWD/acme:/acme"
+      # This is required for the docker provider of traefik to work (read container labels, etc)
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    # Uncomment and edit above if you want to expose secure dashboard. Do not forget to generate TRAEFIK_AUTH with htpasswd for authentication
+    # Make sure the dns is pointing to the traefik instance
+    #labels:
+    #  - "traefik.enable=true"
+    #  - "traefik.docker.network=http_network"
+    #  - "traefik.http.routers.traefik.entrypoints=websecure"
+    #  - "traefik.http.routers.traefik.rule=Host(`traefik.domain.tld`)"
+    #  - "traefik.http.routers.traefik.service=api@internal"
+    #  - "traefik.http.routers.traefik.middlewares=auth"
+    #  - "traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_AUTH}"
+    #  - "traefik.http.routers.traefik.tls=true"
+    #  - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+    #  - "traefik.http.routers.traefik.tls.domains[0].main=traefik.domain.tld"
+    #  - "traefik.http.routers.traefik.tls.options=default"

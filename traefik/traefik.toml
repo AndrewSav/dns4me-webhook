@@ -1,0 +1,34 @@
+## static configuration
+
+[entryPoints.websecure]
+address = ":443"
+
+[entryPoints.web]
+address = ":80"
+[entryPoints.web.http.redirections.entryPoint]
+to = "websecure"
+
+[providers.docker]
+exposedByDefault=false
+
+[providers.file]
+filename = "/file.toml"
+
+# Those commented out lines helps with debugging
+#[log]
+#level = "DEBUG"
+
+#[accessLog]
+
+
+# Those commented out lines enable dashboard
+#[api]
+#insecure = true
+
+[certificatesResolvers.letsencrypt.acme]
+#change to your email
+email = "admin@domain.com"
+# Uncomment to avoid hitting rate limit during debugging
+#caserver= "https://acme-staging-v02.api.letsencrypt.org/directory"
+storage = "/acme/acme.json"
+[certificatesResolvers.letsencrypt.acme.tlsChallenge]

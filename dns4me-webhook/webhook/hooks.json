@@ -1,0 +1,14 @@
+[
+  {
+    "id": "dns4me",
+    "include-command-output-in-response": true,
+    "include-command-output-in-response-on-error": true,
+    "execute-command": "/scripts/dns4me.ps1",
+    "pass-arguments-to-command":
+    [
+      {
+        "source": "entire-query"
+      }
+    ]
+  }
+]

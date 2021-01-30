@@ -1,0 +1,31 @@
+﻿version: '3.8'
+
+networks:
+  http_network:
+    external: true
+
+services:
+  webhook:
+    image: andrewsav/webhook:2.8.0
+    container_name: webhook
+    restart: unless-stopped
+    command: ["-hooks=/etc/webhook/hooks.json","-debug"]
+    environment:
+      - "DNS4ME_URL=https://dns4me.net/api/v2/get_hosts/mikrotik"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=http_network"
+      - "traefik.http.routers.webhook.entrypoints=websecure"
+      - "traefik.http.routers.webhook.rule=Host(`dns4me.bat.nz`)"
+      - "traefik.http.routers.webhook.service=webhook"
+      - "traefik.http.routers.webhook.tls=true"
+      - "traefik.http.routers.webhook.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.webhook.tls.domains[0].main=dns4me.bat.nz"
+      - "traefik.http.routers.webhook.tls.options=default"
+      - "traefik.http.services.webhook.loadbalancer.server.port=9000"
+      - "traefik.http.services.webhook.loadbalancer.server.scheme=http"
+    volumes:
+      - $PWD/webhook:/etc/webhook
+      - $PWD/scripts:/scripts
+    networks:
+      - http_network
