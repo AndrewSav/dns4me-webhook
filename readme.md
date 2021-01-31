@@ -1,5 +1,7 @@
 ﻿# Fixing dns4me hosts file for later version of Mikrotik RouterOS
 
+***Archived because the issue is resovled on dns4me side***
+
 This is a really quick and dirty fix, so not much hand-holding, although it's relatively straight-forwards if you know what you are looking at.
 
 This is the original Mikrotik script:
@@ -35,7 +37,7 @@ Additionally, some of the generated sctrings are too long for Mikrotik to digest
 
 This repository provides a website that you can call instead of dns4me. The website will call dns4me for you, fix the returned script and return you the result.
 
-I'm temporarely hosting a public version at `https://dns4me.bat.nz/hooks/dns4me`. To use it change the string in the script above from:
+~~I'm temporarely hosting a public version at `https://dns4me.bat.nz/hooks/dns4me`~~. To use it change the string in the script above from:
 
 ```text
   :local mikrotikUrl "https://dns4me.net/api/v2/get_hosts/mikrotik/GUID
